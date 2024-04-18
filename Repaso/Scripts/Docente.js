@@ -1,9 +1,24 @@
-﻿listar();
+﻿$("#dtFechaContrato").datepicker({
+  dateFormat: "dd/mm/yy",
+  changeMonth: true,
+  changeYear: true,
+});
+
+listar();
 listarComboModalidad();
+
+$.get("Alumno/listarSexo", function (data) {
+  llenarCombo(data, document.getElementById("cboSexoPopup"), true);
+});
 
 function listarComboModalidad() {
   $.get("Docente/listarModalidadContrato", function (data) {
     llenarCombo(data, document.getElementById("cboTipoModalidad"), true);
+    llenarCombo(
+      data,
+      document.getElementById("cboModalidadContratoPopup"),
+      true
+    );
   });
 }
 
@@ -42,29 +57,43 @@ function listar() {
 
 function crearListado(arrayColumnas, data) {
   var contenido = "";
-  contenido += `
-      <table id='tablas' class='table'>
-      <thead>
-      <tr>`;
-  for (var i = 0; i < arrayColumnas.length; i++)
-    contenido += `<td>${arrayColumnas[i]}</td>`;
-  contenido += `
-      </tr>
-      </thead>
-      <tbody>`;
+  contenido += "<table id='tablas'  class='table' >";
+  contenido += "<thead>";
+  contenido += "<tr>";
+  for (var i = 0; i < arrayColumnas.length; i++) {
+    contenido += "<td>";
+    contenido += arrayColumnas[i];
+    contenido += "</td>";
+  }
+  contenido += "<td>Operaciones</td>";
+  contenido += "</tr>";
+  contenido += "</thead>";
   var llaves = Object.keys(data[0]);
+  contenido += "<tbody>";
   for (var i = 0; i < data.length; i++) {
-    contenido += `<tr>`;
+    contenido += "<tr>";
     for (var j = 0; j < llaves.length; j++) {
-      var valorLlaves = llaves[j];
-      contenido += `<td>${data[i][valorLlaves]}</td>`;
+      var valorLLaves = llaves[j];
+      contenido += "<td>";
+      contenido += data[i][valorLLaves];
+      contenido += "</td>";
     }
+    var llaveId = llaves[0];
+    contenido += "<td>";
+    contenido +=
+      "<button class='btn btn-primary' onclick='abrirModal(" +
+      data[i][llaveId] +
+      ")' data-toggle='modal' data-target='#myModal'><i class='glyphicon glyphicon-edit'></i></button> ";
+    contenido +=
+      "<button class='btn btn-danger' onclick='eliminar(" +
+      data[i][llaveId] +
+      ")' ><i class='glyphicon glyphicon-trash'></i></button>";
+    contenido += "</td>";
+
     contenido += "</tr>";
   }
-
-  contenido += ` 
-      </tbody>
-      </table>`;
+  contenido += "</tbody>";
+  contenido += "</table>";
   document.getElementById("tabla").innerHTML = contenido;
   $("#tablas").dataTable({
     searching: false,
