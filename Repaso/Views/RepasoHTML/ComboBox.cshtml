@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "ComboBox";
+}
+
+<h2>ComboBox</h2>
+
+<select>
+    <option value="1">Lunes</option>
+    <option value="2">Martes</option>
+    <option value="3">Miercoles</option>
+    <option value="4">Jueves</option>
+    <option value="5">Viernes</option>
+</select>
+
+<select id="cboCategoria">
+    <option value="1">Cat01</option>
+    <option value="2">Cat02</option>
+    <option value="3">Cat03</option>
+    <option value="4">Cat04</option>
+</select>
+
+<input type="button" value="Obtener Id" id="btnValor"/>
+
+@*Es lo mismo que escribirlo en un archiso .js*@
+<script>
+
+    var btnValor = document.getElementById("btnValor");
+    btnValor.onclick = function () {
+
+        var idCategoria = document.getElementById("cboCategoria").value;
+
+        alert(idCategoria);
+    }
+
+</script>
