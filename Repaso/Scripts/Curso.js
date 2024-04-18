@@ -42,10 +42,13 @@ function crearListado(arrayColumnas, data) {
       var valorLlaves = llaves[j];
       contenido += `<td>${data[i][valorLlaves]}</td>`;
     }
+    var llaveId = llaves[0];
     //los iconos
     contenido += "<td>";
     contenido +=
-      "<button class='btn btn-primary data-toggle='modal' data-target='#myModal'><i class='glyphicon glyphicon-edit'></i></button> ";
+      "<button class='btn btn-primary' onclick='abrirModal(" +
+      data[i][llaveId] +
+      ")' data-toggle='modal' data-target='#myModal'><i class='glyphicon glyphicon-edit'></i></button> ";
     contenido +=
       "<button class='btn btn-danger' ><i class='glyphicon glyphicon-trash'></i></button> ";
     contenido += "</td>";
@@ -58,4 +61,18 @@ function crearListado(arrayColumnas, data) {
   $("#tablas").dataTable({
     searching: false,
   });
+}
+
+function abrirModal(id) {
+  if (id == 0) {
+    alert("Desde Agregar");
+  } else {
+    alert("Desde Editar");
+    $.get("Curso/recuperarDatos/?id=" + id),
+      function (data) {
+        document.getElementById("txtIdCurso").value = data[0].IIDCURSO;
+        document.getElementById("txtNombre").value = data[0].NOMBRE;
+        document.getElementById("txtDescripcion").value = data[0].DESCRIPCION;
+      };
+  }
 }
